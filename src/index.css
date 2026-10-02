@@ -1,0 +1,327 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-display: 'Grenze Gotisch Variable', 'Grenze Gotisch', Georgia, serif;
+
+  /* Easing: Apple's sheet curve and a soft quint for light/opacity changes */
+  --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ─── Base ──────────────────────────────────────────────────────────────── */
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scrollbar-gutter: stable;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background: #000;
+    color: var(--color-zinc-100);
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-size: 1.0625rem; /* 17px, Apple's body size */
+    line-height: 1.5;
+    letter-spacing: -0.012em; /* Inter tracking at 17px */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(245 158 11 / 0.35);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-amber-400);
+    outline-offset: 3px;
+    border-radius: 999px;
+  }
+
+  section[id] {
+    scroll-margin-top: 4.5rem;
+  }
+
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Type scale: tracking tightens and leading closes as size grows ───── */
+
+@utility display-xl {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(5.75rem, 25vw, 15rem);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+}
+
+@utility display-lg {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 7vw, 5.25rem);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+
+@utility display-md {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.005em;
+}
+
+@utility headline {
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.024em;
+  font-weight: 600;
+}
+
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ─── Materials ─────────────────────────────────────────────────────────── */
+
+/* Fine grain + slow mottling: the troweled concrete on the shop walls */
+/* Needs a positioned element (add relative/absolute alongside it) */
+@utility concrete {
+  isolation: isolate;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0.07;
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>"),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900'><filter id='m'><feTurbulence type='fractalNoise' baseFrequency='.004 .009' numOctaves='4' seed='7' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23m)'/></svg>");
+  }
+}
+
+/* The welded wire mesh partition: fine cells inside heavier frame rails */
+@utility mesh {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.07) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1.5px, transparent 1.5px),
+    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size:
+    224px 224px,
+    224px 224px,
+    28px 28px,
+    28px 28px;
+  background-position: center;
+}
+
+/* Translucent chrome: content scrolls underneath */
+@utility glass {
+  background: rgb(10 10 11 / 0.62);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  backdrop-filter: blur(24px) saturate(170%);
+}
+
+@utility glass-chip {
+  background: rgb(24 24 27 / 0.55);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+/* A hairline that catches light along the top edge, like brushed steel */
+@utility hairline {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* The square LED pendants hanging over each station */
+@utility led {
+  border: 1.5px solid rgb(255 241 214);
+  box-shadow:
+    0 0 1px rgb(255 236 200),
+    0 0 10px 1px rgb(251 191 36 / 0.7),
+    0 0 36px 4px rgb(245 158 11 / 0.38),
+    0 0 110px 18px rgb(245 158 11 / 0.14),
+    inset 0 0 10px 1px rgb(251 191 36 / 0.55),
+    inset 0 0 36px 4px rgb(245 158 11 / 0.18);
+}
+
+@utility text-led {
+  color: var(--color-amber-300);
+  text-shadow:
+    0 0 18px rgb(245 158 11 / 0.55),
+    0 0 2px rgb(253 230 138 / 0.6);
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────── */
+
+@layer components {
+
+.btn-glass {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.07);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 12px 44px -12px rgb(245 158 11 / 0.65),
+    0 0 80px -20px rgb(245 158 11 / 0.45);
+  transition:
+    transform 140ms var(--ease-out-quint),
+    box-shadow 400ms var(--ease-out-quint);
+}
+
+/* Amber rim: brighter at the top where the LED light lands */
+.btn-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    180deg,
+    rgb(253 230 138 / 0.85),
+    rgb(245 158 11 / 0.25) 45%,
+    rgb(255 255 255 / 0.04) 70%,
+    rgb(245 158 11 / 0.4)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+/* One pass of light across the glass on hover — never looping */
+.btn-glass::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 245 220 / 0.22) 50%, transparent 65%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .btn-glass:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.3),
+      0 0 0 1px rgb(0 0 0 / 0.5),
+      0 16px 56px -12px rgb(245 158 11 / 0.85),
+      0 0 120px -20px rgb(245 158 11 / 0.6);
+  }
+  .btn-glass:hover::after {
+    transform: translateX(110%);
+    transition: transform 900ms var(--ease-out-quint);
+  }
+}
+
+.btn-glass__spot {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    140px circle at var(--mx, 50%) var(--my, 50%),
+    rgb(251 191 36 / 0.32),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 300ms var(--ease-out-quint);
+}
+
+@media (hover: hover) {
+  .btn-glass:hover .btn-glass__spot {
+    opacity: 1;
+  }
+}
+
+/* Feedback lives on the press, and it is instant */
+.press {
+  transition: transform 140ms var(--ease-out-quint);
+}
+.press:active,
+.btn-glass:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+
+} /* end components */
+
+/* ─── Utilities ─────────────────────────────────────────────────────────── */
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 1.5rem, #000 calc(100% - 1.5rem), transparent);
+}
+
+/* ─── Accessibility preferences ────────────────────────────────────────── */
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .glass-chip,
+  .btn-glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--color-zinc-900);
+  }
+}
+
+@media (prefers-contrast: more) {
+  .glass,
+  .glass-chip,
+  .btn-glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: #000;
+    outline: 1px solid rgb(255 255 255 / 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-glass::after {
+    display: none;
+  }
+  .press:active,
+  .btn-glass:active {
+    transform: none;
+  }
+}
